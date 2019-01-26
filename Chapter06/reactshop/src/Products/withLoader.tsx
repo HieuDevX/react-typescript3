@@ -20,8 +20,8 @@ interface IProps {
 
 const withLoader = <P extends object>(
   Component: React.ComponentType<P>
-): React.FC<P & IProps> => ({ loading, ...props }: IProps) =>
-  loading ? (
+): React.FC<P & IProps> => (props: P & IProps) =>
+  props.loading ? (
     <div className="loader-overlay">
       <div className="loader-circle-wrap">
         <div className="loader-circle" />
@@ -30,7 +30,7 @@ const withLoader = <P extends object>(
   ) : (
     // "as any" fix bug "Type error: Type '{}' is not assignable to type 'P'"
     // (because of typescript 3.2 behaviour of the spread operator for generics has changed)
-    <Component {...props as any} />
+    <Component {...props} />
   );
 
 // const withLoader = <P extends object>(Component: React.ComponentType<P>) =>
