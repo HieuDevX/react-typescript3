@@ -6,11 +6,6 @@ export interface IProduct {
   reviews: IReview[];
 }
 
-export interface IReview {
-  comment: string;
-  reviewer: string;
-}
-
 export const products: IProduct[] = [
   {
     description:
@@ -23,10 +18,7 @@ export const products: IProduct[] = [
         comment: "Excellent! This does everything I want",
         reviewer: "Billy"
       },
-      {
-        comment: "The best router I've ever worked with",
-        reviewer: "Sally"
-      }
+      { comment: "The best router I've ever worked with", reviewer: "Sally" }
     ]
   },
   {
@@ -36,12 +28,12 @@ export const products: IProduct[] = [
     price: 12,
     reviews: [
       {
-        comment: "Excellent! This does everything I want",
-        reviewer: "Hieu"
+        comment: "I've found this really useful in a large app I'm working on",
+        reviewer: "Billy"
       },
       {
-        comment: "The best router I've ever worked with",
-        reviewer: "Nghia"
+        comment: "A bit confusing at first but simple when you get used to it",
+        reviewer: "Sally"
       }
     ]
   },
@@ -52,13 +44,28 @@ export const products: IProduct[] = [
     price: 12,
     reviews: [
       {
-        comment: "Excellent! This does everything I want",
-        reviewer: "Chien"
+        comment: "I'll never work with a REST API again!",
+        reviewer: "Billy"
       },
       {
-        comment: "The best router I've ever worked with",
-        reviewer: "Truong"
+        comment: "It makes working with GraphQL backends a breeze",
+        reviewer: "Sally"
       }
     ]
   }
 ];
+
+export interface IReview {
+  comment: string;
+  reviewer: string;
+}
+
+export const getProduct = async (id: number): Promise<IProduct | null> => {
+  await wait(1000);
+  const foundProducts = products.filter(customer => customer.id === id);
+  return foundProducts.length === 0 ? null : foundProducts[0];
+};
+
+const wait = (ms: number): Promise<void> => {
+  return new Promise(resolve => setTimeout(resolve, ms));
+};

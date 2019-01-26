@@ -19,8 +19,7 @@ import ProductPage from "../Products/ProductPage";
 import NotFoundPage from "../NotFoundPage";
 import Header from "../Header/Header";
 import LoginPage from "../Admin/LoginPage";
-import ContactUsPage from "../ContactUs/ContactUsPage";
-import { timeout } from "q";
+import ContactUsPage from "../Contact/ContactUsPage";
 
 const AdminPage = React.lazy(() => import("../Admin/AdminPage"));
 
@@ -52,6 +51,7 @@ const Routes: React.FC<RouteComponentProps> = props => {
             <Route exact={true} path="/products" component={ProductsPage} />
             <Route path="/products/:id" component={ProductPage} />
             <Route path="/contactus" component={ContactUsPage} />
+
             <Route path="/admin">
               {loggedIn ? (
                 <Suspense

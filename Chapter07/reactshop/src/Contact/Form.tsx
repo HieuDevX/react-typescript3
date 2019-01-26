@@ -1,9 +1,22 @@
-import * as React from "react";
+import React from "react";
+import { string } from "prop-types";
+
+interface IFieldProps {
+  name: string;
+  label: string;
+  type?: "Text" | "Email" | "Select" | "TextArea";
+  options?: string[];
+}
+
+export interface IValues {
+  [key: string]: any;
+}
 
 interface IFormProps {
   defaultValues: IValues;
+  validationRules: IValidationProp;
+  onSubmit: (values: IValues) => Promise<ISubmitResult>;
 }
-
 interface IState {
   values: IValues;
   errors: IErrors;
@@ -11,9 +24,17 @@ interface IState {
   submitted: boolean;
 }
 
-export interface IValues {
-  [key: string]: any;
+interface IFormContext {
+  errors: IErrors;
+  values: IValues;
+  setValue?: (fieldName: string, value: any) => void;
+  validate?: (fieldName: string, value: any) => void;
 }
+
+const FormContext = React.createContext<IFormContext>({
+  errors: {},
+  values: {}
+});
 
 export class Form extends React.Component<IFormProps, IState> {
   public static Field: React.FC<IFieldProps> = props => {
@@ -57,7 +78,6 @@ export class Form extends React.Component<IFormProps, IState> {
                 onBlur={e => handleBlur(e, context)}
               />
             )}
-
             {type === "TextArea" && (
               <textarea
                 id={name}
@@ -66,7 +86,6 @@ export class Form extends React.Component<IFormProps, IState> {
                 onBlur={e => handleBlur(e, context)}
               />
             )}
-
             {type === "Select" && (
               <select
                 value={context.values[name]}
@@ -107,7 +126,6 @@ export class Form extends React.Component<IFormProps, IState> {
       values: props.defaultValues
     };
   }
-
   public render() {
     const context: IFormContext = {
       errors: this.state.errors,
@@ -115,11 +133,10 @@ export class Form extends React.Component<IFormProps, IState> {
       validate: this.validate,
       values: this.state.values
     };
-
     return (
       <FormContext.Provider value={context}>
         <form className="form" noValidate={true} onSubmit={this.handleSubmit}>
-          >{this.props.children}
+          {this.props.children}
           <div className="form-group">
             <button
               type="submit"
@@ -141,7 +158,10 @@ export class Form extends React.Component<IFormProps, IState> {
   private validate = (fieldName: string, value: any): string[] => {
     const rules = this.props.validationRules[fieldName];
     const errors: string[] = [];
+
+    // TODO - execute all the validators
     if (Array.isArray(rules)) {
+      // TODO - execute all the validators in the array of rules
       rules.forEach(rule => {
         const error = rule.validator(fieldName, this.state.values, rule.arg);
         if (error) {
@@ -156,6 +176,7 @@ export class Form extends React.Component<IFormProps, IState> {
         }
       }
     }
+
     const newErrors = { ...this.state.errors, [fieldName]: errors };
     this.setState({ errors: newErrors });
     return errors;
@@ -191,39 +212,20 @@ export class Form extends React.Component<IFormProps, IState> {
   };
 }
 
-interface IFieldProps {
-  name: string;
-  label: string;
-  type?: "Text" | "Email" | "Select" | "TextArea";
-  options?: string[];
-}
-
 Form.Field.defaultProps = {
   type: "Text"
 };
 
-interface IFormContext {
-  errors: IErrors;
-  values: IValues;
-  setValue?: (fieldName: string, value: any) => void;
-  validate?: (fieldName: string, value: any) => void;
-}
-
-const FormContext = React.createContext<IFormContext>({
-  errors: {},
-  values: {}
-});
-
 export type Validator = (
   fieldName: string,
   values: IValues,
-  args: any
+  args?: any
 ) => string;
 
 export const required: Validator = (
   fieldName: string,
   values: IValues,
-  args: any
+  args?: any
 ): string =>
   values[fieldName] === undefined ||
   values[fieldName] === null ||
@@ -249,19 +251,8 @@ interface IValidationProp {
   [key: string]: IValidation | IValidation[];
 }
 
-interface IFormProps {
-  defaultValues: IValues;
-  validationRules: IValidationProp;
-  onSubmit: (value: IValues) => Promise<ISubmitResult>;
-}
-
 interface IErrors {
   [key: string]: string[];
-}
-
-interface IState {
-  values: IValues;
-  errors: IErrors;
 }
 
 export interface ISubmitResult {

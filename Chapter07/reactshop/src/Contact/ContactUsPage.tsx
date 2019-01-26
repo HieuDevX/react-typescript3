@@ -1,7 +1,6 @@
-import * as React from "react";
+import React from "react";
 import ContactUs from "./ContactUs";
-import { IValues, ISubmitResult } from "./Form";
-import { resolve } from "dns";
+import { ISubmitResult, IValues } from "./Form";
 
 interface IState {
   name: string;
@@ -11,15 +10,15 @@ interface IState {
 }
 
 class ContactUsPage extends React.Component<{}, IState> {
-  // public constructor(props: {}) {
-  //   super(props);
-  //   this.state = {
-  //     email: "",
-  //     name: "",
-  //     notes: "",
-  //     reason: ""
-  //   };
-  // }
+  public constructor(props: {}) {
+    super(props);
+    this.state = {
+      email: "",
+      name: "",
+      notes: "",
+      reason: ""
+    };
+  }
 
   public render() {
     return (
@@ -28,17 +27,7 @@ class ContactUsPage extends React.Component<{}, IState> {
         <p>
           If you enter your details we'll get back to you as soon as we can.
         </p>
-        <ContactUs
-          onSubmit={this.handleSubmit}
-          // name={this.state.name}
-          // onNameChange={this.handleNameChange}
-          // email={this.state.email}
-          // onEmailChange={this.handleEmailChange}
-          // reason={this.state.reason}
-          // onReasonChange={this.handleReasonChange}
-          // notes={this.state.notes}
-          // onNotesChange={this.handleNotesChange}
-        />
+        <ContactUs onSubmit={this.handleSubmit} />
       </div>
     );
   }
@@ -49,8 +38,7 @@ class ContactUsPage extends React.Component<{}, IState> {
       // errors: {
       //   email: ["Some is wrong with this"]
       // },
-      // success: false
-      success: true
+      success: false
     };
   };
 
@@ -68,8 +56,8 @@ class ContactUsPage extends React.Component<{}, IState> {
   // };
 }
 
-export default ContactUsPage;
-
 const wait = (ms: number): Promise<void> => {
   return new Promise(resolve => setTimeout(resolve, ms));
 };
+
+export default ContactUsPage;

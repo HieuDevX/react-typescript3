@@ -1,9 +1,25 @@
-import * as React from "react";
+import React, { useState, useEffect } from "react";
 
+// interface IProps {
+//   headings: string[];
+// }
 interface IState {
   activeName: string;
   activeContent: React.ReactNode;
 }
+
+interface ITabProps {
+  name: string;
+  initialActive?: boolean;
+  heading: () => string | JSX.Element;
+}
+
+interface ITabsContext {
+  activeName?: string;
+  handleTabClick?: (name: string, content: React.ReactNode) => void;
+}
+
+const TabsContext = React.createContext<ITabsContext>({});
 
 class Tabs extends React.Component<{}, IState> {
   public static Tab: React.FC<ITabProps> = props => (
@@ -56,17 +72,29 @@ class Tabs extends React.Component<{}, IState> {
   };
 }
 
-interface ITabProps {
-  name: string;
-  initialActive?: boolean;
-  heading: () => string | JSX.Element;
-}
+// const TabsFC: React.FC<IProps> = props => {
+//   const initialActiveHeading: string =
+//     props.headings && props.headings.length > 0 ? props.headings[0] : "";
+//   const [activeHeading, setActiveHeading] = useState(initialActiveHeading);
 
-interface ITabsContext {
-  activeName?: string;
-  handleTabClick?: (name: string, content: React.ReactNode) => void;
-}
+//   const handleTabClick = (e: React.MouseEvent<HTMLLIElement>) => {
+//     const li = e.target as HTMLLIElement;
+//     const heading: string = li.textContent ? li.textContent : "";
+//     setActiveHeading(heading);
+//   };
 
-const TabsContext = React.createContext<ITabsContext>({});
+//   return (
+//     <ul className="tabs">
+//       {props.headings.map(heading => (
+//         <li
+//           onClick={handleTabClick}
+//           className={heading === activeHeading ? "active" : ""}
+//         >
+//           {heading}
+//         </li>
+//       ))}
+//     </ul>
+//   );
+// };
 
 export default Tabs;

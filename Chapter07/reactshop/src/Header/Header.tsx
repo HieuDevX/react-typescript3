@@ -18,7 +18,8 @@ const Header: React.FC<RouteComponentProps> = props => {
 
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearch(e.currentTarget.value);
-    console.log(search);
+    console.log(e.currentTarget.value);
+    console.log(`search: ${search}`);
   };
 
   const handleSearchKeydown = (e: React.KeyboardEvent<HTMLInputElement>) => {
